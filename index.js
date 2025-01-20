@@ -1,0 +1,5 @@
+```
+bash
+WHATSAPP_NUMBER=+1234567890
+WHATSAPP_PASSWORD=your_password
+```
