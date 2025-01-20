@@ -87,4 +87,3 @@
     await connect(); // Initial connection call
   } catch (error) {
     console.error("
-```
