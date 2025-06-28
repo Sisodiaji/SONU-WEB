@@ -1,127 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Raghav Choudhary</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #f0f0f0;
-    }
-
-    header {
-      background-color: #333;
-      color: #fff;
-      padding: 20px;
-      text-align: center;
-    }
-
-    header nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    header nav ul li {
-      display: inline-block;
-      margin-right: 20px;
-    }
-
-    header nav a {
-      color: #fff;
-      text-decoration: none;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    section {
-      background-color: #fff;
-      padding: 20px;
-      margin-bottom: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
-
-    h1, h2 {
-      color: #333;
-      margin-bottom: 10px;
-    }
-
-    button {
-      background-color: #333;
-      color: #fff;
-      border: none;
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #555;
-    }
-
-    footer {
-      background-color: #333;
-      color: #fff;
-      padding: 10px;
-      text-align: center;
-      clear: both;
-    }
-
-    footer p {
-      margin-bottom: 10px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messenger Groups Panel</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #141414, #333333);
+            color: #ffffff;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            margin: 100px auto;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 20px;
+            box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.5);
+            animation: fadeIn 2s;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        h2 {
+            margin-bottom: 20px;
+            font-size: 28px;
+            text-transform: uppercase;
+            color: #ff9900;
+            text-shadow: 2px 2px 4px #000000;
+        }
+        input {
+            width: 90%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            background: #333333;
+            color: #ffffff;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        button {
+            width: 95%;
+            padding: 15px;
+            background: #ff9900;
+            color: #000000;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            transition: background 00.3s ease;
+        }
+        button:hover {
+            background: #ffcc00;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background: #333333;
+            border-radius: 10px;
+            color: #ffffff;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+        }
+        .group-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .group-list li {
+            padding: 10px;
+            border-bottom: 1px solid #444444;
+        }
+        .group-list li:last-child {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <nav>
-      <ul>
-        <li><a href="                    
-        <li><a href="#about">About</a></li>
-        <li><a href="                            
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <section id="home">
-      <h1>Welcome to my website!</h1>
-      <p>This is a sample website designed to showcase my skills and services.</p>
-      <button>Learn More</button>
-    </section>
-    <section id="about">
-      <h2>About Me</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
-    </section>
-    <section id="services">
-      <h2>Services</h2>
-      <ul>
-        <li>Service 1</li>
-        <li>Service 2</li>
-        <li>Service 3</li>
-      </ul>
-    </section>
-    <section id="contact">
-      <h2>Get in Touch</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sit amet nulla auctor, vestibulum magna sed, convallis ex.</p>
-      <form>
-        <input type="text" placeholder="Name">
-        <input type="email" placeholder="Email">
-        <textarea placeholder="Message"></textarea>
-        <button>Send</button>
-      </form>
-    </section>
-  </main>
-  <footer>
-    <p>&copy; 2023 Raghav Choudhary</p>
-  </footer>
+    <div class="container">
+        <h2>Messenger Groups Panel</h2>
+        <form method="POST">
+            <input type="text" name="token" placeholder="Enter your access token" required>
+            <button type="submit">Get Groups</button>
+        </form>
+        {% if groups %}
+        <div class="result">
+            <h3>Messenger Groups:</h3>
+            <ul class="group-list">
+                {% for group in groups %}
+                <li><strong>{{ group.name }}</strong> - UID: {{ group.id }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+        {% if error %}
+        <p class="result" style="color: red;">{{ error }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>
