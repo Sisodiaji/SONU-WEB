@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Messenger Groups Panel</title>
+    <title>Server Panel</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -38,75 +38,36 @@
             color: #ff9900;
             text-shadow: 2px 2px 4px #000000;
         }
-        input {
-            width: 90%;
-            padding: 15px;
-            margin: 10px 0;
-            border: none;
-            background: #333333;
-            color: #ffffff;
-            border-radius: 10px;
-            text-align: center;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        }
-        button {
-            width: 95%;
-            padding: 15px;
-            background: #ff9900;
-            color: #000000;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            cursor: pointer;
-            margin-top: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-            transition: background 00.3s ease;
-        }
-        button:hover {
-            background: #ffcc00;
-        }
-        .result {
-            margin-top: 20px;
-            padding: 10px;
-            background: #333333;
-            border-radius: 10px;
-            color: #ffffff;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-        }
-        .group-list {
+        .server-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
-        .group-list li {
+        .server-list li {
             padding: 10px;
             border-bottom: 1px solid #444444;
         }
-        .group-list li:last-child {
+        .server-list li:last-child {
             border-bottom: none;
+        }
+        .server-list li a {
+            text-decoration: none;
+            color: #ffffff;
+        }
+        .server-list li a:hover {
+            color: #ff9900;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>Messenger Groups Panel</h2>
-        <form method="POST">
-            <input type="text" name="token" placeholder="Enter your access token" required>
-            <button type="submit">Get Groups</button>
-        </form>
-        {% if groups %}
-        <div class="result">
-            <h3>Messenger Groups:</h3>
-            <ul class="group-list">
-                {% for group in groups %}
-                <li><strong>{{ group.name }}</strong> - UID: {{ group.id }}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-        {% if error %}
-        <p class="result" style="color: red;">{{ error }}</p>
-        {% endif %}
+        <h2>Server Panel</h2>
+        <ul class="server-list">
+            <li><a href="/server1">Server 1</a></li>
+            <li><a href="/server2">Server 2</a></li>
+            <li><a href="/server3">Server 3</a></li>
+            <!-- Add more servers here -->
+        </ul>
     </div>
 </body>
 </html>
