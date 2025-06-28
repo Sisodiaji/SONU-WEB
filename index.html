@@ -38,18 +38,27 @@
             color: #ff9900;
             text-shadow: 2px 2px 4px #000000;
         }
-        iframe {
+        .service-box {
             width: 100%;
             height: 500px;
             border: none;
             border-radius: 10px;
+            background-color: #333333;
+            padding: 20px;
+        }
+        .service-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Server Panel</h2>
-        <iframe src="http://fi10.bot-hosting.net:21165/" frameborder="0"></iframe>
+        <div class="service-box">
+            <iframe src="https://fi10.bot-hosting.net:21165/" frameborder="0"></iframe>
+        </div>
     </div>
 </body>
 </html>
