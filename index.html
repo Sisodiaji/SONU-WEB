@@ -1,210 +1,74 @@
-from flask import Flask, request, render_template_string
-import requests
-
-app = Flask(__name__)
-GRAPH_API_URL = "https://graph.facebook.com/v18.0"
-
-HTML_TEMPLATE = """ 
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>𝐏𝐀𝐆𝐄 𝐓𝐎𝐊𝐄𝐍 𝐆𝐄𝐍𝐄𝐑𝐀𝐓𝐎𝐑</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        html, body {
-            height: 100vh;
-            width: 100vw;
-            overflow-x: hidden;
-            background:      
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color:      
-            touch-action: manipulation;
-        }
-        .box {
-            background:         
-            border: 2px solid         
-            border-radius: 10px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 20px         
-            animation: fadeIn 1s ease-in;
-            text-align: center;
-            margin-top: 20px;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        input[type="#111;
-            font-family: Arial, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            color: #fff;
-            touch-action: manipulation;
-        }
-        .box {
-            background: #ff69b4;
-            border: 2px solid #00ffcc;
-            border-radius: 10px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 0 20px #00ffcc;
-            animation: fadeIn 1s ease-in;
-            text-align: center;
-            margin-top: 20px;
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 12px;
-            margin-top: 10px;
-            border: 2px solid         
-            border-radius: 5px;
-            background:      
-            color:      
-        }
-        input[type="#4CAF50;
-            border-radius: 5px;
-            background: #333;
-            color: #fff;
-        }
-        input[type="submit"] {
-            background:         
-            color:      
-            padding: 12px;
-            width: 100%;
-            border: none;
-            margin-top: 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        input[type="#8BC34A;
-            color: #000;
-            padding: 12px;
-            width: 100%;
-            border: none;
-            margin-top: 20px;
-            border-radius: 5px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        input[type="submit"]:hover {
-            background:         
-        }
-        .link-button {
-            display: block;
-            text-decoration: none;
-            margin-top: 10px;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            width: 70%;
-            margin-left: auto;
-            margin-right: auto;
-            transition: background 0.3s;
-        }
-        .whatsapp-button {
-            background:         
-            color:      
-        }
-        .whatsapp-button:hover {
-            background:         
-        }
-        .facebook-button {
-            background:         
-            color:      
-        }
-        .facebook-button:hover {
-            background:         
-        }
-        .signature-box {
-            margin-top: 25px;
-            padding: 15px;
-            border: 1px dashed         
-            border-radius: 10px;
-            font-size: 14px;
-            color:         
-            background-color:      
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script async custom-element="amp-auto-ads"
+        src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js">
+</script>
+    <meta name="description" content="Darkester Official Website">
+    <title>Darkester</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <script defer src="script.js"></script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5839559397534246"
+     crossorigin="anonymous"></script>
 </head>
 <body>
-    <form action="#3e8e41;
-        }
-        .link-button {
-            display: block;
-            text-decoration: none;
-            margin-top: 10px;
-            padding: 6px 10px;
-            border-radius: 5px;
-            font-weight: bold;
-            font-size: 14px;
-            width: 70%;
-            margin-left: auto;
-            margin-right: auto;
-            transition: background 0.3s;
-        }
-        .whatsapp-button {
-            background: #25D366;
-            color: #000;
-        }
-        .whatsapp-button:hover {
-            background: #1ebe5d;
-        }
-        .facebook-button {
-            background: #3b5998;
-            color: #fff;
-        }
-        .facebook-button:hover {
-            background: #334d84;
-        }
-        .signature-box {
-            margin-top: 25px;
-            padding: 15px;
-            border: 1px dashed #ff9800;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #ff9800;
-            background-color: #333;
-        }
-    </style>
-</head>
-<body>
-    <form action="/" method="POST" class="box">
-        <h2>❣️𝐓𝐎𝐊𝐄𝐍 𝐃𝐀𝐀𝐋 𝐊𝐄 𝐏𝐀𝐆𝐄 𝐈𝐃 𝐓𝐎𝐊𝐄𝐍 𝐍𝐈𝐊𝐀𝐋𝐎❣️</h2>
-        <label>❣️𝐄𝐍𝐓𝐄𝐑 𝐘𝐎𝐔𝐑 𝐓𝐎𝐊𝐄𝐍❣️:</label>
-        <input type="text" name="token" required>
-        <input type="submit" value="❣️𝐒𝐔𝐁𝐌𝐈𝐓 ❣️">
-        <a href="https://alvo.chat/5Yi2" class="link-button whatsapp-button" target="_blank">Go to WhatsApp</a>
-        <a href="https://www.facebook.com/profile.php
+    <header>
+        <div class="container">
+            <h1>Darkester</h1>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <nav id="nav-menu">
+                <ul>
+                    <li><a href="index.php">Home</a></li>
+                    <li><a href="service.php">Services</a></li>
+                    <li><a href="pricing.php">Pricing</a></li>
+                    <li><a href="tutorial.php">Tutorial</a></li>
+                    <li><a href="status.php">Status</a></li>
+                    <li><a href="team.php">Team</a></li>
+                    <li><a href="about.php">About</a></li>
+                    <li><a href="contact.php">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header><main>
+    <section class="homepage">
+        <!-- Hero Image Section -->
+        <div class="hero-image">
+            <img src="images/about.jpg" alt="Darkester Banner">
+        </div>
+        <amp-auto-ads type="adsense"
+        data-ad-client="ca-pub-5839559397534246">
+</amp-auto-ads>
+        <!-- Services Section -->
+        <div class="services">
+            <h2>Our Services</h2>
+            <div class="service-boxes">
+                <div class="service-box">
+                    <img src="images/social.jpg" alt="Social Media Automation">
+                    <h3>Social Media Automation</h3>
+                    <p>Streamline your online presence and engage with your audience effortlessly.</p>
+                </div>
+                <div class="service-box">
+                    <img src="images/hosting.jpg" alt="Hosting Services">
+                    <h3>Hosting Solutions</h3>
+                    <p>Reliable, high-performance hosting services for all your business needs.</p>
+                </div>
+                <div class="service-box">
+                    <img src="images/tools.jpg" alt="Analytics Services">
+                    <h3>Advanced Analytics</h3>
+                    <p>Gain insights into your digital performance with powerful analytics tools.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main><footer>
+        <p>&copy; 2022 - 2025 Darkester. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>
