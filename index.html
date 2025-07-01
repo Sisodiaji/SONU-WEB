@@ -1,121 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>URL Panel</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f2f4f8;
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      justify-content: center;
-    }
-
-    .container {
-      background: white;
-      padding: 2rem;
-      border-radius: 8px;
-      width: 100%;
-      max-width: 500px;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 1rem;
-      color: #333;
-    }
-
-    form {
-      display: flex;
-      gap: 0.5rem;
-      margin-bottom: 1rem;
-    }
-
-    input[type="url"] {
-      flex: 1;
-      padding: 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-    }
-
-    button {
-      padding: 0.5rem 1rem;
-      background: #007bff;
-      border: none;
-      color: white;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #0056b3;
-    }
-
-    #urlList {
-      list-style: none;
-      padding: 0;
-    }
-
-    #urlList li {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #eef1f5;
-      padding: 0.5rem;
-      margin-bottom: 0.5rem;
-      border-radius: 4px;
-    }
-
-    #urlList a {
-      color: #007bff;
-      text-decoration: none;
-      word-break: break-all;
-    }
-
-    #urlList button {
-      background: transparent;
-      border: none;
-      color: red;
-      font-size: 1.2rem;
-      cursor: pointer;
-    }
-  </style>
+  <meta charset="UTF-8">
+  <title>UID Extractor</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="container">
-    <h1>🌐 URL Panel</h1>
+    <h1>UID Extractor</h1>
+    <form id="uidForm">
+      <label for="token1">Token 1:</label>
+      <input type="text" id="token1" placeholder="Enter first token" required>
 
-    <form id="urlForm">
-      <input type="url" id="urlInput" placeholder="Enter your URL here..." required />
-      <button type="submit">Add URL</button>
+      <label for="token2">Token 2:</label>
+      <input type="text" id="token2" placeholder="Enter second token" required>
+
+      <button type="submit">Extract UID</button>
     </form>
-
-    <ul id="urlList">
-      <!-- URLs will be added here dynamically -->
-    </ul>
+    <div class="output">
+      <h2>UID:</h2>
+      <p id="uidOutput">--</p>
+    </div>
   </div>
 
   <script>
-    const form = document.getElementById('urlForm');
-    const input = document.getElementById('urlInput');
-    const list = document.getElementById('urlList');
-
-    form.addEventListener('submit', (e) => {
+    document.getElementById("uidForm").addEventListener("submit", function(e) {
       e.preventDefault();
-      const url = input.value.trim();
-      if (url) {
-        const li = document.createElement('li');
-        li.innerHTML = `
-          <a href="${url}" target="_blank">${url}</a>
-          <button onclick="this.parentElement.remove()">❌</button>
-        `;
-        list.appendChild(li);
-        input.value = '';
-      }
+      const t1 = document.getElementById("token1").value.trim();
+      const t2 = document.getElementById("token2").value.trim();
+
+      // Example logic to simulate UID extraction
+      const uid = btoa(t1 + ":" + t2).slice(0, 16); // Fake UID
+      document.getElementById("uidOutput").textContent = uid;
     });
   </script>
 </body>
