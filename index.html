@@ -1,38 +1,151 @@
+HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>UID Extractor</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Messenger Group Extractor</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2c3e50, #4ca1af);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: 90%;
+      max-width: 500px;
+      background: rgba(0, 0, 0, 0.75);
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 25px;
+      font-size: 26px;
+      color: #f1c40f;
+      letter-spacing: 1px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+      text-align: left;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+
+    .input-group textarea {
+      width: 100%;
+      height: 100px;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      background: #34495e;
+      color: #ecf0f1;
+      font-size: 14px;
+      resize: vertical;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      font-size: 16px;
+      background: #e67e22;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #d35400;
+    }
+
+    h2 {
+      margin-top: 30px;
+      font-size: 20px;
+      color: #1abc9c;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+      text-align: left;
+    }
+
+    ul li {
+      padding: 10px;
+      border-bottom: 1px solid #7f8c8d;
+    }
+
+    .result {
+      margin-top: 20px;
+      padding: 12px;
+      background: #2c3e50;
+      border-radius: 8px;
+      color: #ffffff;
+    }
+
+    p[style*="color: red"] {
+      margin-top: 20px;
+      font-weight: bold;
+      color: #ff6b6b !important;
+    }
+
+    @media (max-width: 500px) {
+      h1 {
+        font-size: 22px;
+      }
+      button {
+        font-size: 14px;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="container">
-    <h1>UID Extractor</h1>
-    <form id="uidForm">
-      <label for="token1">Token 1:</label>
-      <input type="text" id="token1" placeholder="Enter first token" required>
-
-      <label for="token2">Token 2:</label>
-      <input type="text" id="token2" placeholder="Enter second token" required>
-
-      <button type="submit">Extract UID</button>
+    <h1>Messenger Group Extractor</h1>
+    <form method="POST">
+      <div class="input-group">
+        <label for="token">Enter Access Token:</label>
+        <textarea id="token" name="token" placeholder="Enter Access Token" required></textarea>
+      </div>
+      <button type="submit">Extract Groups</button>
     </form>
-    <div class="output">
-      <h2>UID:</h2>
-      <p id="uidOutput">--</p>
-    </div>
+
+    {% if groups %}
+      <h2>Messenger Groups:</h2>
+      <ul>
+        {% for group in groups %}
+          <li><strong>{{ group.name }}</strong> - UID: {{ group.id }}</li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    {% if error %}
+      <p style="color: red;">{{ error }}</p>
+    {% endif %}
   </div>
-
-  <script>
-    document.getElementById("uidForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const t1 = document.getElementById("token1").value.trim();
-      const t2 = document.getElementById("token2").value.trim();
-
-      // Example logic to simulate UID extraction
-      const uid = btoa(t1 + ":" + t2).slice(0, 16); // Fake UID
-      document.getElementById("uidOutput").textContent = uid;
-    });
-  </script>
 </body>
 </html>
+"""
