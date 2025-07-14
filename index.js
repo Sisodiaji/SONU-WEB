@@ -5,7 +5,7 @@ const login = require("fca-unofficial");
 const path = require("path");
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
@@ -13,40 +13,33 @@ app.use(express.urlencoded({ extended: true }));
 const upload = multer({ dest: "uploads/" });
 
 app.post("/start", upload.single("appstate"), (req, res) => {
-    const appstatePath = req.file.path;
-    const threadId = req.body.threadId;
-    const enforcedName = req.body.enforcedName;
+  const threadId = req.body.threadId;
+  const enforcedName = req.body.enforcedName;
+  const appStateFile = req.file.path;
 
-    if (!threadId || !enforcedName) {
-        return res.send("Missing threadId or enforcedName");
-    }
-
-    const appState = JSON.parse(fs.readFileSync(appstatePath, "utf8"));
+  try {
+    const appState = JSON.parse(fs.readFileSync(appStateFile, "utf8"));
 
     login({ appState }, (err, api) => {
-        if (err) return res.send("Login failed: " + err);
+      if (err) {
+        console.error("Login error:", err);
+        return res.send("Login failed: " + (err.error || err));
+      }
 
-        res.send("Monitoring started for group " + threadId + " with enforced name " + enforcedName);
-
-        setInterval(() => {
-            api.getThreadInfo(threadId, (err, info) => {
-                if (err) return console.log("Error getting group info:", err.message);
-
-                const currentName = info.name;
-                if (currentName !== enforcedName) {
-                    console.log(`Group name changed! Reverting to: ${enforcedName}`);
-                    api.setTitle(enforcedName, threadId, (err) => {
-                        if (err) return console.log("Failed to reset group name:", err.message);
-                        console.log(`Name restored to "${enforcedName}"`);
-                    });
-                } else {
-                    console.log("Name is correct.");
-                }
-            });
-        }, 10000);
+      api.setGroupInfo(threadId, { name: enforcedName }, (err) => {
+        if (err) {
+          console.error("Failed to change name:", err);
+          return res.send("Failed to lock group name.");
+        }
+        return res.send("Group name locked to: " + enforcedName);
+      });
     });
+  } catch (e) {
+    console.error("Error parsing appstate:", e);
+    return res.send("Invalid appstate file.");
+  }
 });
 
 app.listen(port, () => {
-    console.log("Server running on http://localhost:" + port);
+  console.log(`Server running at http://localhost:${port}`);
 });

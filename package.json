@@ -1,7 +1,7 @@
 {
   "name": "group-name-locker",
   "version": "1.0.0",
-  "description": "Locks Facebook group name using fca-unofficial",
+  "description": "Facebook Group Name Locker",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
