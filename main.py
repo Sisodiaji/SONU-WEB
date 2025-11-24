@@ -4,7 +4,10 @@ from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-headers = {"User-Agent": "Mozilla/5.0"}
+headers = {
+    "User-Agent": "Mozilla/5.0 (Linux; Android 10) Mobile Safari/537.36",
+    "Accept-Language": "en-US,en;q=0.9"
+}
 
 def convert_cookies(cookie_string):
     cookies = {}
@@ -14,32 +17,74 @@ def convert_cookies(cookie_string):
             cookies[key] = value
     return cookies
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    group_list = []
 
-    if request.method == "POST":
-        cookie_text = request.form.get("cookies")
-        cookies = convert_cookies(cookie_text)
+def extract_groups(html):
+    soup = BeautifulSoup(html, "html.parser")
+    groups = []
+
+    for a in soup.find_all("a"):
+        href = a.get("href", "")
+
+        if "/groups/" not in href:
+            continue
 
         try:
-            r = requests.get("https://mbasic.facebook.com/groups/?seemore",
-                             cookies=cookies, headers=headers)
-            soup = BeautifulSoup(r.text, "html.parser")
+            uid = href.split("/groups/")[1].split("/")[0].split("?")[0]
 
-            for link in soup.find_all("a"):
-                href = link.get("href", "")
-                if "/groups/" in href and "?refid" in href:
-                    try:
-                        group_uid = href.split("/groups/")[1].split("?")[0]
-                        group_name = link.text.strip()
-                        group_list.append({"uid": group_uid, "name": group_name})
-                    except:
-                        pass
-        except Exception as e:
-            return f"Error: {str(e)}"
+            if not uid.isdigit():
+                continue
 
-    return render_template("index.html", groups=group_list)
+            name = a.text.strip()
+            if name == "":
+                continue
+
+            groups.append({"uid": uid, "name": name})
+        except:
+            pass
+
+    return groups
+
+
+@app.route("/", methods=["GET", "POST"])
+def home():
+    groups = []
+    error = None
+
+    if request.method == "POST":
+        cookie_input = request.form.get("cookies")
+
+        if not cookie_input:
+            return render_template("index.html", groups=groups, error="Please enter cookies.")
+
+        cookies = convert_cookies(cookie_input)
+
+        urls = [
+            "https://mbasic.facebook.com/groups/?seemore",
+            "https://mbasic.facebook.com/groups_browse/",
+            "https://mbasic.facebook.com/groups/?ref=bookmarks"
+        ]
+
+        for url in urls:
+            try:
+                r = requests.get(url, cookies=cookies, headers=headers, timeout=8)
+
+                if "login" in r.url:
+                    error = "Invalid or expired cookies. Please login again and copy fresh cookies."
+                    return render_template("index.html", groups=groups, error=error)
+
+                extracted = extract_groups(r.text)
+
+                if extracted:
+                    groups.extend(extracted)
+
+            except:
+                pass
+
+        if not groups:
+            error = "No groups found. Your cookies might be invalid or Facebook layout changed."
+
+    return render_template("index.html", groups=groups, error=error)
+
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=80)
+    app.run(host="0.0.0.0", port=5000)
